@@ -3,76 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#080808" />
+  <meta name="theme-color" content="#070707" />
   <title>Ghost Store — Admin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="admin.css" />
 </head>
 <body class="admin-page">
   <div class="auth-screen" id="authScreen">
-    <form class="auth-card" id="loginForm">
-      <a class="brand" href="index.html"><span class="brand-mark">G</span><span><strong>GHOST</strong> STORE</span></a>
-      <span class="eyebrow">ACESSO RESTRITO</span>
-      <h1>Painel administrativo</h1>
-      <p>Entre com a conta autorizada. Se ainda não existir administrador, use estes mesmos dados para criar o primeiro acesso.</p>
-      <label>E-mail<input id="loginEmail" type="email" autocomplete="email" required placeholder="seu@email.com" /></label>
-      <label>Senha<input id="loginPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="••••••••" /></label>
-      <button class="btn btn-primary full" type="submit" id="loginButton">Entrar</button>
-      <button class="btn btn-secondary full" type="button" id="signupButton">Criar primeiro administrador</button>
-      <div class="auth-message" id="authMessage"></div>
-      <a class="back-store" href="index.html">← Voltar para a loja</a>
-    </form>
+    <section class="auth-showcase">
+      <a class="wd-brand" href="index.html"><span class="wd-monogram">G</span><div><strong>GHOST</strong><small>STORE</small></div></a>
+      <div class="auth-showcase-copy">
+        <span class="gold-kicker">PAINEL DE GESTÃO</span>
+        <h1>Seu negócio digital<br><em>em um só lugar.</em></h1>
+        <p>Gerencie produtos, arquivos privados, catálogo e operação da Ghost Store em uma experiência inspirada no painel WD.</p>
+        <div class="auth-benefits">
+          <span>✦ Catálogo centralizado</span>
+          <span>✦ Arquivos protegidos</span>
+          <span>✦ Gestão simples e premium</span>
+        </div>
+      </div>
+      <small class="showcase-footer">GHOST STORE · ADMINISTRATION</small>
+    </section>
+
+    <section class="auth-form-side">
+      <form class="auth-card" id="loginForm">
+        <div class="auth-logo-mobile"><span class="wd-monogram">G</span></div>
+        <span class="gold-kicker">ACESSO RESTRITO</span>
+        <h2>Bem-vindo de volta</h2>
+        <p>Entre com sua conta de administrador para acessar o painel.</p>
+        <label>E-mail<input id="loginEmail" type="email" autocomplete="email" required placeholder="seu@email.com" /></label>
+        <label>Senha<input id="loginPassword" type="password" autocomplete="current-password" required minlength="6" placeholder="••••••••" /></label>
+        <button class="wd-primary full" type="submit" id="loginButton">Entrar no painel</button>
+        <button class="wd-secondary full" type="button" id="signupButton">Criar primeiro administrador</button>
+        <div class="auth-message" id="authMessage"></div>
+        <a class="back-store" href="index.html">← Voltar para a loja</a>
+      </form>
+    </section>
   </div>
 
-  <div id="adminApp" class="hidden">
-    <header class="admin-header">
-      <a class="brand" href="index.html"><span class="brand-mark">G</span><span><strong>GHOST</strong> STORE</span></a>
-      <div class="admin-header-actions">
-        <span class="admin-email" id="adminEmail"></span>
-        <span class="status-pill" id="backendStatus">Conectando...</span>
-        <a class="btn btn-secondary" href="index.html">Ver loja</a>
-        <button class="btn btn-secondary" id="logoutButton" type="button">Sair</button>
+  <div id="adminApp" class="hidden wd-admin-layout">
+    <aside class="wd-sidebar">
+      <a class="wd-brand sidebar-brand" href="index.html"><span class="wd-monogram">G</span><div><strong>GHOST</strong><small>STORE</small></div></a>
+      <nav class="wd-menu">
+        <span class="menu-label">VISÃO GERAL</span>
+        <button class="wd-menu-item active" data-admin-tab="products"><span>▦</span> Produtos</button>
+        <a class="wd-menu-item" href="index.html"><span>⌂</span> Ver loja</a>
+        <span class="menu-label">ADMINISTRAÇÃO</span>
+        <button class="wd-menu-item" data-admin-tab="settings"><span>⚙</span> Integração</button>
+      </nav>
+      <div class="sidebar-profile">
+        <div class="avatar-g">G</div>
+        <div><strong>Administrador</strong><small id="adminEmail"></small></div>
       </div>
-    </header>
+      <button class="sidebar-logout" id="logoutButton" type="button">Sair da conta</button>
+    </aside>
 
-    <main class="admin-shell">
-      <aside class="admin-sidebar">
-        <span class="eyebrow">PAINEL ADMINISTRATIVO</span>
-        <h1>Controle da loja</h1>
-        <p>Cadastre, edite, publique ou remova produtos e envie ZIPs, GLBs e outros arquivos para armazenamento privado.</p>
-        <nav class="admin-nav">
-          <button class="active" data-admin-tab="products">Produtos</button>
-          <button data-admin-tab="settings">Integração</button>
-        </nav>
-      </aside>
+    <main class="wd-main">
+      <header class="wd-topbar">
+        <div>
+          <span class="gold-kicker">GHOST STORE</span>
+          <h1>Olá, Admin 👋</h1>
+          <p>Veja o que está acontecendo na sua loja hoje.</p>
+        </div>
+        <div class="topbar-actions">
+          <span class="status-pill" id="backendStatus">Conectando...</span>
+          <a class="wd-secondary" href="index.html">Abrir loja</a>
+        </div>
+      </header>
 
       <section class="admin-content">
         <div class="admin-tab" id="tab-products">
-          <div class="admin-toolbar">
-            <div><span class="eyebrow">CATÁLOGO</span><h2>Produtos</h2></div>
-            <button class="btn btn-primary" id="newProductButton">+ Novo produto</button>
+          <div class="admin-stats wd-stats">
+            <article><div class="metric-icon">▦</div><small>Produtos</small><strong id="statProducts">0</strong><span>Total cadastrado</span></article>
+            <article><div class="metric-icon">✓</div><small>Publicados</small><strong id="statPublished">0</strong><span>Visíveis na loja</span></article>
+            <article><div class="metric-icon">★</div><small>Exclusivos</small><strong id="statExclusive">0</strong><span>Produtos premium</span></article>
+            <article><div class="metric-icon">R$</div><small>Valor catálogo</small><strong id="statValue">R$ 0,00</strong><span>Soma dos produtos</span></article>
           </div>
-          <div class="admin-stats">
-            <article><small>Produtos</small><strong id="statProducts">0</strong></article>
-            <article><small>Publicados</small><strong id="statPublished">0</strong></article>
-            <article><small>Exclusivos</small><strong id="statExclusive">0</strong></article>
-            <article><small>Valor catálogo</small><strong id="statValue">R$ 0,00</strong></article>
-          </div>
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Status</th><th></th></tr></thead>
-              <tbody id="productTableBody"></tbody>
-            </table>
-            <div class="admin-empty hidden" id="adminEmpty">Nenhum produto cadastrado.</div>
+
+          <div class="wd-section-grid">
+            <section class="wd-panel main-panel">
+              <div class="admin-toolbar">
+                <div><span class="gold-kicker">CATÁLOGO</span><h2>Mercadorias digitais</h2><p>Cadastre e edite tudo que está à venda.</p></div>
+                <button class="wd-primary" id="newProductButton">+ Novo produto</button>
+              </div>
+              <div class="admin-table-wrap">
+                <table class="admin-table">
+                  <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Status</th><th></th></tr></thead>
+                  <tbody id="productTableBody"></tbody>
+                </table>
+                <div class="admin-empty hidden" id="adminEmpty">Nenhum produto cadastrado.</div>
+              </div>
+            </section>
+
+            <aside class="wd-panel quick-panel">
+              <span class="gold-kicker">AÇÕES RÁPIDAS</span>
+              <h3>Gerenciar loja</h3>
+              <button class="quick-action" onclick="document.getElementById('newProductButton').click()"><b>＋</b><span><strong>Novo produto</strong><small>Adicionar ao catálogo</small></span></button>
+              <a class="quick-action" href="index.html"><b>↗</b><span><strong>Visualizar loja</strong><small>Abrir página pública</small></span></a>
+              <button class="quick-action" data-admin-tab="settings"><b>⚙</b><span><strong>Integração</strong><small>Ver conexão Supabase</small></span></button>
+            </aside>
           </div>
         </div>
 
         <div class="admin-tab hidden" id="tab-settings">
-          <div class="admin-toolbar"><div><span class="eyebrow">BACKEND</span><h2>Integração Supabase</h2></div></div>
-          <div class="settings-card">
+          <section class="wd-panel settings-card">
+            <div class="admin-toolbar"><div><span class="gold-kicker">BACKEND</span><h2>Integração Supabase</h2><p>Conexão e segurança da Ghost Store.</p></div></div>
             <h3>Estado atual</h3>
             <p id="settingsStatusText">Verificando conexão.</p>
             <div class="settings-grid">
@@ -81,8 +119,8 @@
               <label>Bucket privado<input value="product-files" readonly /></label>
               <label>Autorização<input value="RLS + store_admins" readonly /></label>
             </div>
-            <p class="settings-note">Somente a URL e a chave pública/publishable ficam no navegador. Nunca use <code>service_role</code> ou secret key neste projeto frontend.</p>
-          </div>
+            <p class="settings-note">Somente URL e chave pública ficam no navegador. Chaves secretas não são expostas.</p>
+          </section>
         </div>
       </section>
     </main>
@@ -90,7 +128,7 @@
     <div class="admin-modal-backdrop hidden" id="productEditor">
       <form class="admin-modal" id="productForm">
         <div class="admin-modal-head">
-          <div><span class="eyebrow">PRODUTO</span><h2 id="editorTitle">Novo produto</h2></div>
+          <div><span class="gold-kicker">PRODUTO</span><h2 id="editorTitle">Novo produto</h2></div>
           <button type="button" class="modal-close" id="closeEditor">×</button>
         </div>
         <input type="hidden" id="productId" />
@@ -101,7 +139,7 @@
           <label>Preço (R$)<input id="productPrice" type="number" min="0" step="0.01" required /></label>
           <label>Selo<input id="productBadge" placeholder="PRONTO PARA USAR" /></label>
           <label>Ícone curto<input id="productIcon" maxlength="6" placeholder="WEB" /></label>
-          <label>Cor<input id="productColor" type="color" value="#d8ff3f" /></label>
+          <label>Cor<input id="productColor" type="color" value="#caa65a" /></label>
           <label>Status<select id="productPublished"><option value="true">Publicado</option><option value="false">Rascunho</option></select></label>
           <label class="wide">Descrição<textarea id="productDescription" rows="4" required></textarea></label>
           <label class="wide">Tags <small>(separe por vírgula)</small><input id="productMeta" placeholder="HTML/CSS/JS, Responsivo, Editável" /></label>
@@ -109,17 +147,13 @@
           <label>Licença<input id="specLicense" placeholder="Comercial" /></label>
           <label>Código / formato<input id="specCode" placeholder="Incluído" /></label>
           <label>Suporte<input id="specSupport" placeholder="Instalação" /></label>
-          <label class="wide">Arquivo privado
-            <input id="productFile" type="file" accept=".zip,.glb,.gltf,.png,.jpg,.jpeg,.webp,.pdf,.rar,.7z,.blend,.fbx,.obj" />
-            <small id="uploadHint">Escolha um arquivo para enviar ao bucket privado.</small>
-          </label>
+          <label class="wide">Arquivo privado<input id="productFile" type="file" accept=".zip,.glb,.gltf,.png,.jpg,.jpeg,.webp,.pdf,.rar,.7z,.blend,.fbx,.obj" /><small id="uploadHint">Escolha um arquivo para enviar ao bucket privado.</small></label>
           <label class="wide">Caminho armazenado<input id="productFilePath" readonly placeholder="Ainda sem arquivo" /></label>
         </div>
         <div class="editor-actions">
-          <button type="button" class="btn danger-btn hidden" id="deleteProductButton">Excluir</button>
-          <span></span>
-          <button type="button" class="btn btn-secondary" id="cancelEditor">Cancelar</button>
-          <button type="submit" class="btn btn-primary" id="saveProductButton">Salvar produto</button>
+          <button type="button" class="danger-btn hidden" id="deleteProductButton">Excluir</button><span></span>
+          <button type="button" class="wd-secondary" id="cancelEditor">Cancelar</button>
+          <button type="submit" class="wd-primary" id="saveProductButton">Salvar produto</button>
         </div>
       </form>
     </div>
