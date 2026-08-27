@@ -9,7 +9,8 @@ const DEFAULT_PRODUCTS = [
 const categories=[{name:'Sites',icon:'◫',desc:'Landing pages, lojas e plataformas'},{name:'Sistemas',icon:'⌘',desc:'Painéis, automações e web apps'},{name:'GLB / 3D',icon:'◇',desc:'Modelos e assets tridimensionais'},{name:'Assets',icon:'✦',desc:'Sprites, HUDs, PNGs e packs'},{name:'ZIPs',icon:'▣',desc:'Código-fonte e pacotes completos'},{name:'Ideias',icon:'◎',desc:'Conceitos, planos e blueprints'}];
 let products=[],activeFilter='Todos',query='',selectedProduct=null,cart=JSON.parse(localStorage.getItem('ghostStoreCart')||'[]');
 const cfg=window.GHOST_STORE_CONFIG||{};
-const WHATSAPP_NUMBER='5531994515624';
+// Este WhatsApp está cadastrado/roteado sem o nono dígito no identificador internacional.
+const WHATSAPP_NUMBER='553194515624';
 const money=value=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value);
 const qs=id=>document.getElementById(id);
 function openWhatsApp(text){const url=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;window.location.href=url;}
@@ -24,7 +25,7 @@ function closeProduct(){qs('productModal').classList.add('hidden');document.body
 function saveCart(){localStorage.setItem('ghostStoreCart',JSON.stringify(cart));renderCart()}
 function addToCart(id){if(!cart.includes(id))cart.push(id);saveCart();showToast('Produto adicionado ao carrinho')}
 function removeFromCart(id){cart=cart.filter(item=>item!==id);saveCart()}
-function renderCart(){const items=cart.map(id=>products.find(p=>p.id===id)).filter(Boolean);cart=items.map(p=>p.id);qs('cartCount').textContent=items.length;qs('cartItems').innerHTML=items.map(p=>`<div class="cart-item"><div class="cart-thumb">${p.icon}</div><div><h4>${p.name}</h4><small>${money(p.price)}</small></div><button class="remove-item" data-remove="${p.id}" aria-label="Remover">×</button></div>`).join('');qs('cartEmpty').classList.toggle('hidden',items.length>0);qs('cartTotal').textContent=money(items.reduce((sum,p)=>sum+p.price,0));document.querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click',()=>removeFromCart(btn.dataset.remove)))}
+function renderCart(){const items=cart.map(id=>products.find(p=>products.find(x=>x.id===id)?.id===p?.id)).filter(Boolean);cart=items.map(p=>p.id);qs('cartCount').textContent=items.length;qs('cartItems').innerHTML=items.map(p=>`<div class="cart-item"><div class="cart-thumb">${p.icon}</div><div><h4>${p.name}</h4><small>${money(p.price)}</small></div><button class="remove-item" data-remove="${p.id}" aria-label="Remover">×</button></div>`).join('');qs('cartEmpty').classList.toggle('hidden',items.length>0);qs('cartTotal').textContent=money(items.reduce((sum,p)=>sum+p.price,0));document.querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click',()=>removeFromCart(btn.dataset.remove)))}
 function openCart(){qs('drawerBackdrop').classList.remove('hidden');qs('cartDrawer').classList.add('open');qs('cartDrawer').setAttribute('aria-hidden','false');document.body.classList.add('no-scroll')}
 function closeCart(){qs('drawerBackdrop').classList.add('hidden');qs('cartDrawer').classList.remove('open');qs('cartDrawer').setAttribute('aria-hidden','true');document.body.classList.remove('no-scroll')}
 function showToast(message){const t=qs('toast');t.textContent=message;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),2200)}
