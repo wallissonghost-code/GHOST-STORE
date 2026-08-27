@@ -3,47 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#080808" />
+  <meta name="theme-color" content="#080b10" />
   <meta name="description" content="Ghost Store — projetos digitais, sites, GLBs, ZIPs, assets e ideias prontas para usar." />
   <title>Ghost Store — Projetos digitais prontos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="tech.css" />
 </head>
 <body>
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
   <header class="site-header">
-    <a class="brand" href="#inicio" aria-label="Ghost Store"><span class="brand-mark">G</span><span><strong>GHOST</strong> STORE</span></a>
+    <a class="brand" href="#inicio" aria-label="Ghost Store"><span class="brand-mark"><span class="brand-cube"><span></span><span></span><span></span></span></span><span><strong>GHOST</strong> STORE</span></a>
     <nav class="desktop-nav" aria-label="Navegação principal"><a href="#catalogo">Catálogo</a><a href="#categorias">Categorias</a><a href="#como-funciona">Como funciona</a><a href="#orcamento">Sob medida</a></nav>
-    <div class="header-actions">
-      <a class="btn btn-secondary" href="admin.html" aria-label="Entrar no painel administrativo">Entrar</a>
-      <button class="icon-btn" id="searchToggle" aria-label="Pesquisar">⌕</button>
-      <button class="cart-btn" id="cartButton" aria-label="Abrir carrinho">Carrinho <span id="cartCount">0</span></button>
-    </div>
+    <div class="header-actions"><a class="btn btn-secondary" href="admin.html" aria-label="Entrar no painel administrativo">Entrar</a><button class="icon-btn" id="searchToggle" aria-label="Pesquisar">⌕</button><button class="cart-btn" id="cartButton" aria-label="Abrir carrinho">Carrinho <span id="cartCount">0</span></button></div>
   </header>
 
   <main>
     <section class="hero" id="inicio">
-      <div class="hero-copy"><span class="eyebrow">MARKETPLACE DIGITAL INDEPENDENTE</span><h1>Projetos prontos para <span>criar, lançar e monetizar.</span></h1><p>Compre sites, sistemas, projetos completos, ZIPs, modelos GLB, assets, sprites e conceitos digitais sem complicação.</p><div class="hero-actions"><a class="btn btn-primary" href="#catalogo">Explorar projetos</a><a class="btn btn-secondary" href="#orcamento">Solicitar projeto</a><a class="btn btn-secondary" href="admin.html">Acessar painel</a></div><div class="trust-row"><span>✓ Download digital</span><span>✓ Licença informada</span><span>✓ Suporte ao produto</span></div></div>
-      <div class="hero-card"><div class="hero-card-top"><span class="live-dot"></span><span>DESTAQUE DA SEMANA</span><span class="tag">EXCLUSIVO</span></div><div class="hero-visual"><div class="screen-mockup"><div class="mock-top"><i></i><i></i><i></i></div><div class="mock-layout"><div class="mock-side"></div><div class="mock-main"><div class="mock-title"></div><div class="mock-grid"><b></b><b></b><b></b><b></b></div></div></div></div></div><div class="hero-product-info"><div><span class="mini-label">SITE + PAINEL</span><h3>Marketplace Premium</h3></div><strong>R$ 249</strong></div></div>
+      <div class="hero-copy"><span class="eyebrow">MARKETPLACE DIGITAL • NOVA GERAÇÃO</span><h1>Projetos digitais para <span>criar, lançar e escalar.</span></h1><p>Sites, sistemas, ZIPs, GLBs, assets, sprites e ideias prontas em uma experiência mais tecnológica, rápida e direta.</p><div class="hero-actions"><a class="btn btn-primary" href="#catalogo">Explorar projetos</a><a class="btn btn-secondary" href="#orcamento">Solicitar projeto</a><a class="btn btn-secondary" href="admin.html">Acessar painel</a></div><div class="trust-row"><span>✓ Entrega digital</span><span>✓ Arquivos privados</span><span>✓ Licença informada</span><span>✓ Suporte ao produto</span></div></div>
+
+      <div class="hero-tech" aria-label="Logo 3D animada da Ghost Store">
+        <div class="tech-glow"></div><div class="tech-orbit"></div>
+        <div class="logo3d-wrap">
+          <svg class="logo3d" viewBox="0 0 300 300" role="img" aria-label="Símbolo geométrico Ghost Store">
+            <defs><linearGradient id="edgeGlow" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd08a"/><stop offset=".5" stop-color="#ff9f1c"/><stop offset="1" stop-color="#d96e00"/></linearGradient></defs>
+            <polygon class="face" points="82,50 196,72 244,144 214,225 122,248 56,181 67,102"/>
+            <polyline class="edge" points="82,50 196,72 244,144 214,225 122,248 56,181 67,102 82,50"/>
+            <line class="edge" x1="82" y1="50" x2="145" y2="126"/><line class="edge" x1="196" y1="72" x2="145" y2="126"/><line class="edge" x1="244" y1="144" x2="145" y2="126"/><line class="edge" x1="214" y1="225" x2="145" y2="126"/><line class="edge" x1="122" y1="248" x2="145" y2="126"/><line class="edge" x1="56" y1="181" x2="145" y2="126"/><line class="edge" x1="67" y1="102" x2="145" y2="126"/>
+            <line class="inner" x1="82" y1="50" x2="244" y2="144"/><line class="inner" x1="196" y1="72" x2="214" y2="225"/><line class="inner" x1="67" y1="102" x2="214" y2="225"/><line class="inner" x1="56" y1="181" x2="196" y2="72"/><line class="inner" x1="122" y1="248" x2="244" y2="144"/>
+            <circle class="node" cx="82" cy="50" r="4"/><circle class="node" cx="196" cy="72" r="4"/><circle class="node" cx="244" cy="144" r="4"/><circle class="node" cx="214" cy="225" r="4"/><circle class="node" cx="122" cy="248" r="4"/><circle class="node" cx="56" cy="181" r="4"/><circle class="node" cx="67" cy="102" r="4"/><circle class="node" cx="145" cy="126" r="5"/>
+          </svg>
+        </div>
+        <div class="tech-caption"><i></i> GHOST CORE • SISTEMA ONLINE</div>
+      </div>
     </section>
 
     <section class="search-panel hidden" id="searchPanel"><label for="searchInput">Pesquisar na Ghost Store</label><div class="search-box"><input id="searchInput" type="search" placeholder="Ex.: GLB, site, jogo, painel..." autocomplete="off" /><span>⌕</span></div></section>
-
     <section class="section" id="categorias"><div class="section-heading"><div><span class="eyebrow">ENCONTRE MAIS RÁPIDO</span><h2>Categorias</h2></div></div><div class="category-grid" id="categoryGrid"></div></section>
-
     <section class="section" id="catalogo"><div class="section-heading catalog-heading"><div><span class="eyebrow">CATÁLOGO</span><h2>Projetos em destaque</h2></div><div class="filters" id="filters"></div></div><div class="product-grid" id="productGrid"></div><div class="empty-state hidden" id="emptyState">Nenhum produto encontrado com esse filtro.</div></section>
-
     <section class="benefits" id="como-funciona"><article><span>01</span><h3>Escolha</h3><p>Veja detalhes, tecnologias, licença, arquivos incluídos e demonstrações.</p></article><article><span>02</span><h3>Compre</h3><p>Adicione ao carrinho e finalize seu pedido pelo canal indicado na loja.</p></article><article><span>03</span><h3>Receba</h3><p>Após a confirmação, receba o arquivo digital ou as instruções de acesso.</p></article></section>
-
     <section class="custom-section" id="orcamento"><div class="custom-copy"><span class="eyebrow">NÃO ACHOU O QUE QUER?</span><h2>Transforme sua ideia em um projeto.</h2><p>Descreva o que você precisa e solicite um orçamento para site, sistema, jogo, automação, design, asset ou projeto personalizado.</p></div><form class="quote-form" id="quoteForm"><div class="form-row"><label>Seu nome<input type="text" id="quoteName" required placeholder="Como podemos te chamar?" /></label><label>Tipo de projeto<select id="quoteType"><option>Site</option><option>Sistema</option><option>Jogo</option><option>GLB / 3D</option><option>Sprites / Assets</option><option>ZIP / Código</option><option>Ideia / Planejamento</option><option>Outro</option></select></label></div><label>O que você precisa?<textarea id="quoteMessage" required rows="5" placeholder="Conte a ideia, referências, funções e o que espera receber..."></textarea></label><button class="btn btn-primary" type="submit">Montar solicitação</button><p class="form-note">A loja gera a mensagem para você copiar e enviar pelo seu canal de atendimento.</p></form></section>
   </main>
 
-  <footer><a class="brand" href="#inicio"><span class="brand-mark">G</span><span><strong>GHOST</strong> STORE</span></a><p>Produtos digitais para quem quer tirar projetos do papel.</p><span>© <span id="year"></span> Ghost Store · <a href="admin.html" style="color:inherit">Entrar no painel</a></span></footer>
+  <footer><a class="brand" href="#inicio"><span class="brand-mark"><span class="brand-cube"><span></span><span></span><span></span></span></span><span><strong>GHOST</strong> STORE</span></a><p>Produtos digitais para quem quer tirar projetos do papel.</p><span>© <span id="year"></span> Ghost Store · <a href="admin.html" style="color:inherit">Entrar no painel</a></span></footer>
 
   <div class="drawer-backdrop hidden" id="drawerBackdrop"></div><aside class="cart-drawer" id="cartDrawer" aria-hidden="true"><div class="drawer-header"><div><span class="eyebrow">SEU PEDIDO</span><h2>Carrinho</h2></div><button class="icon-btn" id="closeCart">×</button></div><div class="cart-items" id="cartItems"></div><div class="cart-empty" id="cartEmpty">Seu carrinho está vazio.</div><div class="cart-footer"><div class="total-row"><span>Total</span><strong id="cartTotal">R$ 0,00</strong></div><button class="btn btn-primary full" id="checkoutButton">Finalizar pedido</button><small>Checkout real será conectado na próxima etapa.</small></div></aside>
-
   <div class="modal-backdrop hidden" id="productModal"><div class="product-modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="modalClose">×</button><div class="modal-visual" id="modalVisual"></div><div class="modal-body"><div class="modal-badges" id="modalBadges"></div><h2 id="modalTitle"></h2><p id="modalDescription"></p><div class="product-specs" id="modalSpecs"></div><div class="modal-purchase"><div><span>A partir de</span><strong id="modalPrice"></strong></div><button class="btn btn-primary" id="modalAdd">Adicionar ao carrinho</button></div></div></div></div>
   <div class="toast" id="toast"></div>
   <script src="config.js"></script><script src="app.js"></script>
