@@ -6,74 +6,20 @@ const DEFAULT_PRODUCTS = [
   {id:'source-system',name:'Sistema Web Source Pack',category:'ZIPs',type:'CÓDIGO-FONTE',badge:'EDITÁVEL',price:99,icon:'ZIP',description:'Base de sistema web organizada para adaptar, personalizar e evoluir em novos projetos.',meta:['Source','ZIP','Código'],specs:{Entrega:'ZIP',Licença:'Comercial',Código:'100%',Stack:'Web'},color:'#ffc95b',published:true},
   {id:'startup-blueprint',name:'Blueprint de Produto Digital',category:'Ideias',type:'IDEIA + PLANO',badge:'CONCEITO',price:39,icon:'IDEA',description:'Conceito estruturado com proposta, público, monetização, MVP e próximos passos para execução.',meta:['PDF','Estratégia','MVP'],specs:{Entrega:'Documento',Licença:'Uso próprio',Inclui:'Roadmap',Formato:'Digital'},color:'#7affbb',published:true}
 ];
-
-const categories = [
-  {name:'Sites',icon:'◫',desc:'Landing pages, lojas e plataformas'},
-  {name:'Sistemas',icon:'⌘',desc:'Painéis, automações e web apps'},
-  {name:'GLB / 3D',icon:'◇',desc:'Modelos e assets tridimensionais'},
-  {name:'Assets',icon:'✦',desc:'Sprites, HUDs, PNGs e packs'},
-  {name:'ZIPs',icon:'▣',desc:'Código-fonte e pacotes completos'},
-  {name:'Ideias',icon:'◎',desc:'Conceitos, planos e blueprints'}
-];
-
-let products=[];
-let activeFilter='Todos';
-let query='';
-let selectedProduct=null;
-let cart=JSON.parse(localStorage.getItem('ghostStoreCart')||'[]');
+const categories=[{name:'Sites',icon:'◫',desc:'Landing pages, lojas e plataformas'},{name:'Sistemas',icon:'⌘',desc:'Painéis, automações e web apps'},{name:'GLB / 3D',icon:'◇',desc:'Modelos e assets tridimensionais'},{name:'Assets',icon:'✦',desc:'Sprites, HUDs, PNGs e packs'},{name:'ZIPs',icon:'▣',desc:'Código-fonte e pacotes completos'},{name:'Ideias',icon:'◎',desc:'Conceitos, planos e blueprints'}];
+let products=[],activeFilter='Todos',query='',selectedProduct=null,cart=JSON.parse(localStorage.getItem('ghostStoreCart')||'[]');
 const cfg=window.GHOST_STORE_CONFIG||{};
-
+const WHATSAPP_NUMBER='5531994515624';
 const money=value=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value);
 const qs=id=>document.getElementById(id);
-
-async function loadProducts(){
-  const publicKey=cfg.supabasePublishableKey||cfg.supabaseAnonKey||'';
-  const useSupabase=Boolean(cfg.supabaseUrl&&publicKey);
-  if(useSupabase){
-    try{
-      const url=`${cfg.supabaseUrl}/rest/v1/${cfg.productsTable||'products'}?select=id,name,category,type,badge,price,icon,description,meta,specs,color,published&published=eq.true&order=created_at.desc`;
-      const res=await fetch(url,{headers:{apikey:publicKey,Authorization:`Bearer ${publicKey}`}});
-      if(!res.ok)throw new Error(await res.text());
-      products=(await res.json()).map(normalizeProduct);
-      if(products.length)return;
-    }catch(err){console.warn('Ghost Store: Supabase indisponível, usando catálogo local.',err)}
-  }
-  const local=localStorage.getItem('ghostStoreProducts');
-  if(local){try{products=JSON.parse(local).map(normalizeProduct).filter(p=>p.published!==false)}catch(e){products=[]}}
-  if(!products.length)products=DEFAULT_PRODUCTS.map(normalizeProduct);
-}
-
+function openWhatsApp(text){const url=`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;window.location.href=url;}
+async function loadProducts(){const publicKey=cfg.supabasePublishableKey||cfg.supabaseAnonKey||'';const useSupabase=Boolean(cfg.supabaseUrl&&publicKey);if(useSupabase){try{const url=`${cfg.supabaseUrl}/rest/v1/${cfg.productsTable||'products'}?select=id,name,category,type,badge,price,icon,description,meta,specs,color,published&published=eq.true&order=created_at.desc`;const res=await fetch(url,{headers:{apikey:publicKey,Authorization:`Bearer ${publicKey}`}});if(!res.ok)throw new Error(await res.text());products=(await res.json()).map(normalizeProduct);if(products.length)return}catch(err){console.warn('Ghost Store: Supabase indisponível, usando catálogo local.',err)}}const local=localStorage.getItem('ghostStoreProducts');if(local){try{products=JSON.parse(local).map(normalizeProduct).filter(p=>p.published!==false)}catch(e){products=[]}}if(!products.length)products=DEFAULT_PRODUCTS.map(normalizeProduct)}
 function normalizeProduct(p){return {...p,price:Number(p.price)||0,meta:Array.isArray(p.meta)?p.meta:[],specs:p.specs||{},published:p.published!==false,color:p.color||'#d8ff3f',icon:p.icon||'BOX'}}
-
-function renderCategories(){
-  qs('categoryGrid').innerHTML=categories.map(cat=>`<article class="category-card" data-category="${cat.name}"><span class="icon">${cat.icon}</span><div><strong>${cat.name}</strong><br><small>${cat.desc}</small></div></article>`).join('');
-  document.querySelectorAll('.category-card').forEach(card=>card.addEventListener('click',()=>{activeFilter=card.dataset.category;renderFilters();renderProducts();qs('catalogo').scrollIntoView({behavior:'smooth'});}));
-}
-
-function renderFilters(){
-  const list=['Todos',...categories.map(c=>c.name)];
-  qs('filters').innerHTML=list.map(item=>`<button class="filter-btn ${item===activeFilter?'active':''}" data-filter="${item}">${item}</button>`).join('');
-  document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{activeFilter=btn.dataset.filter;renderFilters();renderProducts();}));
-}
-
-function getFiltered(){
-  return products.filter(p=>{const matchFilter=activeFilter==='Todos'||p.category===activeFilter;const haystack=`${p.name} ${p.category} ${p.type} ${p.description} ${(p.meta||[]).join(' ')}`.toLowerCase();return matchFilter&&haystack.includes(query.toLowerCase());});
-}
-
-function renderProducts(){
-  const filtered=getFiltered();
-  qs('productGrid').innerHTML=filtered.map(p=>`<article class="product-card"><div class="product-cover" style="--coverGlow:${p.color}"><span class="product-type">${p.type}</span><span class="product-badge">${p.badge||''}</span><div class="cover-art">${p.icon}</div><div class="cover-sub">GHOST STORE</div></div><div class="product-content"><div class="product-title-row"><h3>${p.name}</h3><span class="price">${money(p.price)}</span></div><p>${p.description}</p><div class="product-meta">${(p.meta||[]).map(m=>`<span>${m}</span>`).join('')}</div><div class="product-actions"><button class="details-btn" data-details="${p.id}">Ver detalhes</button><button class="quick-add" data-add="${p.id}" aria-label="Adicionar ${p.name}">+</button></div></div></article>`).join('');
-  qs('emptyState').classList.toggle('hidden',filtered.length!==0);
-  document.querySelectorAll('[data-details]').forEach(btn=>btn.addEventListener('click',()=>openProduct(btn.dataset.details)));
-  document.querySelectorAll('[data-add]').forEach(btn=>btn.addEventListener('click',()=>addToCart(btn.dataset.add)));
-}
-
-function openProduct(id){
-  selectedProduct=products.find(p=>p.id===id);if(!selectedProduct)return;
-  qs('modalVisual').textContent=selectedProduct.icon;qs('modalVisual').style.background=`radial-gradient(circle at center, ${selectedProduct.color}22, #101112 68%)`;
-  qs('modalBadges').innerHTML=`<span>${selectedProduct.type}</span><span>${selectedProduct.badge||''}</span>`;qs('modalTitle').textContent=selectedProduct.name;qs('modalDescription').textContent=selectedProduct.description;
-  qs('modalSpecs').innerHTML=Object.entries(selectedProduct.specs||{}).map(([k,v])=>`<div><small>${k}</small><strong>${v}</strong></div>`).join('');qs('modalPrice').textContent=money(selectedProduct.price);qs('productModal').classList.remove('hidden');document.body.classList.add('no-scroll');
-}
+function renderCategories(){qs('categoryGrid').innerHTML=categories.map(cat=>`<article class="category-card" data-category="${cat.name}"><span class="icon">${cat.icon}</span><div><strong>${cat.name}</strong><br><small>${cat.desc}</small></div></article>`).join('');document.querySelectorAll('.category-card').forEach(card=>card.addEventListener('click',()=>{activeFilter=card.dataset.category;renderFilters();renderProducts();qs('catalogo').scrollIntoView({behavior:'smooth'})}))}
+function renderFilters(){const list=['Todos',...categories.map(c=>c.name)];qs('filters').innerHTML=list.map(item=>`<button class="filter-btn ${item===activeFilter?'active':''}" data-filter="${item}">${item}</button>`).join('');document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{activeFilter=btn.dataset.filter;renderFilters();renderProducts()}))}
+function getFiltered(){return products.filter(p=>{const matchFilter=activeFilter==='Todos'||p.category===activeFilter;const haystack=`${p.name} ${p.category} ${p.type} ${p.description} ${(p.meta||[]).join(' ')}`.toLowerCase();return matchFilter&&haystack.includes(query.toLowerCase())})}
+function renderProducts(){const filtered=getFiltered();qs('productGrid').innerHTML=filtered.map(p=>`<article class="product-card"><div class="product-cover" style="--coverGlow:${p.color}"><span class="product-type">${p.type}</span><span class="product-badge">${p.badge||''}</span><div class="cover-art">${p.icon}</div><div class="cover-sub">GHOST STORE</div></div><div class="product-content"><div class="product-title-row"><h3>${p.name}</h3><span class="price">${money(p.price)}</span></div><p>${p.description}</p><div class="product-meta">${(p.meta||[]).map(m=>`<span>${m}</span>`).join('')}</div><div class="product-actions"><button class="details-btn" data-details="${p.id}">Ver detalhes</button><button class="quick-add" data-add="${p.id}" aria-label="Adicionar ${p.name}">+</button></div></div></article>`).join('');qs('emptyState').classList.toggle('hidden',filtered.length!==0);document.querySelectorAll('[data-details]').forEach(btn=>btn.addEventListener('click',()=>openProduct(btn.dataset.details)));document.querySelectorAll('[data-add]').forEach(btn=>btn.addEventListener('click',()=>addToCart(btn.dataset.add)))}
+function openProduct(id){selectedProduct=products.find(p=>p.id===id);if(!selectedProduct)return;qs('modalVisual').textContent=selectedProduct.icon;qs('modalVisual').style.background=`radial-gradient(circle at center, ${selectedProduct.color}22, #101112 68%)`;qs('modalBadges').innerHTML=`<span>${selectedProduct.type}</span><span>${selectedProduct.badge||''}</span>`;qs('modalTitle').textContent=selectedProduct.name;qs('modalDescription').textContent=selectedProduct.description;qs('modalSpecs').innerHTML=Object.entries(selectedProduct.specs||{}).map(([k,v])=>`<div><small>${k}</small><strong>${v}</strong></div>`).join('');qs('modalPrice').textContent=money(selectedProduct.price);qs('productModal').classList.remove('hidden');document.body.classList.add('no-scroll')}
 function closeProduct(){qs('productModal').classList.add('hidden');document.body.classList.remove('no-scroll')}
 function saveCart(){localStorage.setItem('ghostStoreCart',JSON.stringify(cart));renderCart()}
 function addToCart(id){if(!cart.includes(id))cart.push(id);saveCart();showToast('Produto adicionado ao carrinho')}
@@ -82,11 +28,8 @@ function renderCart(){const items=cart.map(id=>products.find(p=>p.id===id)).filt
 function openCart(){qs('drawerBackdrop').classList.remove('hidden');qs('cartDrawer').classList.add('open');qs('cartDrawer').setAttribute('aria-hidden','false');document.body.classList.add('no-scroll')}
 function closeCart(){qs('drawerBackdrop').classList.add('hidden');qs('cartDrawer').classList.remove('open');qs('cartDrawer').setAttribute('aria-hidden','true');document.body.classList.remove('no-scroll')}
 function showToast(message){const t=qs('toast');t.textContent=message;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),2200)}
-
-qs('searchToggle').addEventListener('click',()=>{qs('searchPanel').classList.toggle('hidden');if(!qs('searchPanel').classList.contains('hidden'))qs('searchInput').focus()});
-qs('searchInput').addEventListener('input',e=>{query=e.target.value;renderProducts()});qs('cartButton').addEventListener('click',openCart);qs('closeCart').addEventListener('click',closeCart);qs('drawerBackdrop').addEventListener('click',closeCart);qs('modalClose').addEventListener('click',closeProduct);qs('productModal').addEventListener('click',e=>{if(e.target===qs('productModal'))closeProduct()});qs('modalAdd').addEventListener('click',()=>{if(selectedProduct){addToCart(selectedProduct.id);closeProduct();openCart()}});
-qs('checkoutButton').addEventListener('click',()=>{const items=cart.map(id=>products.find(p=>p.id===id)).filter(Boolean);if(!items.length){showToast('Adicione um produto primeiro');return}const total=items.reduce((sum,p)=>sum+p.price,0);const text=`Olá! Quero finalizar este pedido na GHOST STORE:\n\n${items.map(p=>`• ${p.name} — ${money(p.price)}`).join('\n')}\n\nTotal: ${money(total)}`;navigator.clipboard?.writeText(text);showToast('Pedido copiado. Checkout será integrado depois.');});
-qs('quoteForm').addEventListener('submit',e=>{e.preventDefault();const text=`SOLICITAÇÃO DE PROJETO — GHOST STORE\n\nNome: ${qs('quoteName').value}\nTipo: ${qs('quoteType').value}\n\nProjeto:\n${qs('quoteMessage').value}`;navigator.clipboard?.writeText(text);showToast('Solicitação copiada para a área de transferência');});
+qs('searchToggle').addEventListener('click',()=>{qs('searchPanel').classList.toggle('hidden');if(!qs('searchPanel').classList.contains('hidden'))qs('searchInput').focus()});qs('searchInput').addEventListener('input',e=>{query=e.target.value;renderProducts()});qs('cartButton').addEventListener('click',openCart);qs('closeCart').addEventListener('click',closeCart);qs('drawerBackdrop').addEventListener('click',closeCart);qs('modalClose').addEventListener('click',closeProduct);qs('productModal').addEventListener('click',e=>{if(e.target===qs('productModal'))closeProduct()});qs('modalAdd').addEventListener('click',()=>{if(selectedProduct){addToCart(selectedProduct.id);closeProduct();openCart()}});
+qs('checkoutButton').addEventListener('click',()=>{const items=cart.map(id=>products.find(p=>p.id===id)).filter(Boolean);if(!items.length){showToast('Adicione um produto primeiro');return}const total=items.reduce((sum,p)=>sum+p.price,0);const text=`Olá! Quero finalizar um pedido na GHOST STORE.\n\n${items.map(p=>`• ${p.name}\n  ${p.category} · ${p.type}\n  ${money(p.price)}`).join('\n\n')}\n\nTotal: ${money(total)}\n\nGostaria de saber como finalizar a compra.`;openWhatsApp(text)});
+qs('quoteForm').addEventListener('submit',e=>{e.preventDefault();const name=qs('quoteName').value.trim();const type=qs('quoteType').value;const project=qs('quoteMessage').value.trim();const text=`Olá! Vim pela GHOST STORE e gostaria de solicitar um orçamento.\n\n👤 Nome: ${name}\n📦 Tipo de projeto: ${type}\n\n📝 O que preciso:\n${project}\n\nPodemos conversar sobre valores e prazo?`;openWhatsApp(text)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCart();closeProduct()}});qs('year').textContent=new Date().getFullYear();
-
 (async function init(){renderCategories();renderFilters();await loadProducts();renderProducts();renderCart()})();
