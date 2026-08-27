@@ -16,12 +16,16 @@
   <header class="site-header">
     <a class="brand" href="#inicio" aria-label="Ghost Store"><span class="brand-mark">G</span><span><strong>GHOST</strong> STORE</span></a>
     <nav class="desktop-nav" aria-label="Navegação principal"><a href="#catalogo">Catálogo</a><a href="#categorias">Categorias</a><a href="#como-funciona">Como funciona</a><a href="#orcamento">Sob medida</a></nav>
-    <div class="header-actions"><button class="icon-btn" id="searchToggle" aria-label="Pesquisar">⌕</button><button class="cart-btn" id="cartButton" aria-label="Abrir carrinho">Carrinho <span id="cartCount">0</span></button></div>
+    <div class="header-actions">
+      <a class="btn btn-secondary" href="admin.html" aria-label="Entrar no painel administrativo">Entrar</a>
+      <button class="icon-btn" id="searchToggle" aria-label="Pesquisar">⌕</button>
+      <button class="cart-btn" id="cartButton" aria-label="Abrir carrinho">Carrinho <span id="cartCount">0</span></button>
+    </div>
   </header>
 
   <main>
     <section class="hero" id="inicio">
-      <div class="hero-copy"><span class="eyebrow">MARKETPLACE DIGITAL INDEPENDENTE</span><h1>Projetos prontos para <span>criar, lançar e monetizar.</span></h1><p>Compre sites, sistemas, projetos completos, ZIPs, modelos GLB, assets, sprites e conceitos digitais sem complicação.</p><div class="hero-actions"><a class="btn btn-primary" href="#catalogo">Explorar projetos</a><a class="btn btn-secondary" href="#orcamento">Solicitar projeto</a></div><div class="trust-row"><span>✓ Download digital</span><span>✓ Licença informada</span><span>✓ Suporte ao produto</span></div></div>
+      <div class="hero-copy"><span class="eyebrow">MARKETPLACE DIGITAL INDEPENDENTE</span><h1>Projetos prontos para <span>criar, lançar e monetizar.</span></h1><p>Compre sites, sistemas, projetos completos, ZIPs, modelos GLB, assets, sprites e conceitos digitais sem complicação.</p><div class="hero-actions"><a class="btn btn-primary" href="#catalogo">Explorar projetos</a><a class="btn btn-secondary" href="#orcamento">Solicitar projeto</a><a class="btn btn-secondary" href="admin.html">Acessar painel</a></div><div class="trust-row"><span>✓ Download digital</span><span>✓ Licença informada</span><span>✓ Suporte ao produto</span></div></div>
       <div class="hero-card"><div class="hero-card-top"><span class="live-dot"></span><span>DESTAQUE DA SEMANA</span><span class="tag">EXCLUSIVO</span></div><div class="hero-visual"><div class="screen-mockup"><div class="mock-top"><i></i><i></i><i></i></div><div class="mock-layout"><div class="mock-side"></div><div class="mock-main"><div class="mock-title"></div><div class="mock-grid"><b></b><b></b><b></b><b></b></div></div></div></div></div><div class="hero-product-info"><div><span class="mini-label">SITE + PAINEL</span><h3>Marketplace Premium</h3></div><strong>R$ 249</strong></div></div>
     </section>
 
@@ -36,7 +40,7 @@
     <section class="custom-section" id="orcamento"><div class="custom-copy"><span class="eyebrow">NÃO ACHOU O QUE QUER?</span><h2>Transforme sua ideia em um projeto.</h2><p>Descreva o que você precisa e solicite um orçamento para site, sistema, jogo, automação, design, asset ou projeto personalizado.</p></div><form class="quote-form" id="quoteForm"><div class="form-row"><label>Seu nome<input type="text" id="quoteName" required placeholder="Como podemos te chamar?" /></label><label>Tipo de projeto<select id="quoteType"><option>Site</option><option>Sistema</option><option>Jogo</option><option>GLB / 3D</option><option>Sprites / Assets</option><option>ZIP / Código</option><option>Ideia / Planejamento</option><option>Outro</option></select></label></div><label>O que você precisa?<textarea id="quoteMessage" required rows="5" placeholder="Conte a ideia, referências, funções e o que espera receber..."></textarea></label><button class="btn btn-primary" type="submit">Montar solicitação</button><p class="form-note">A loja gera a mensagem para você copiar e enviar pelo seu canal de atendimento.</p></form></section>
   </main>
 
-  <footer><a class="brand" href="#inicio"><span class="brand-mark">G</span><span><strong>GHOST</strong> STORE</span></a><p>Produtos digitais para quem quer tirar projetos do papel.</p><span>© <span id="year"></span> Ghost Store · <a href="admin.html" style="color:inherit">Admin</a></span></footer>
+  <footer><a class="brand" href="#inicio"><span class="brand-mark">G</span><span><strong>GHOST</strong> STORE</span></a><p>Produtos digitais para quem quer tirar projetos do papel.</p><span>© <span id="year"></span> Ghost Store · <a href="admin.html" style="color:inherit">Entrar no painel</a></span></footer>
 
   <div class="drawer-backdrop hidden" id="drawerBackdrop"></div><aside class="cart-drawer" id="cartDrawer" aria-hidden="true"><div class="drawer-header"><div><span class="eyebrow">SEU PEDIDO</span><h2>Carrinho</h2></div><button class="icon-btn" id="closeCart">×</button></div><div class="cart-items" id="cartItems"></div><div class="cart-empty" id="cartEmpty">Seu carrinho está vazio.</div><div class="cart-footer"><div class="total-row"><span>Total</span><strong id="cartTotal">R$ 0,00</strong></div><button class="btn btn-primary full" id="checkoutButton">Finalizar pedido</button><small>Checkout real será conectado na próxima etapa.</small></div></aside>
 
