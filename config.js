@@ -1,6 +1,7 @@
 window.GHOST_STORE_CONFIG = {
   supabaseUrl: '',
-  supabaseAnonKey: '',
+  supabasePublishableKey: '',
   productsTable: 'products',
+  adminsTable: 'store_admins',
   storageBucket: 'product-files'
 };
