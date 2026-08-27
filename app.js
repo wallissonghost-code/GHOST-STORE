@@ -1,0 +1,198 @@
+const products = [
+  {
+    id:'ghost-market',
+    name:'Marketplace Premium',
+    category:'Sites',
+    type:'SITE + PAINEL',
+    badge:'EXCLUSIVO',
+    price:249,
+    icon:'WEB',
+    description:'Loja digital moderna com catálogo, carrinho, páginas de produto e base pronta para checkout.',
+    meta:['HTML/CSS/JS','Responsivo','Editável'],
+    specs:{Entrega:'ZIP',Licença:'Comercial',Código:'Incluído',Suporte:'Instalação'},
+    color:'#d8ff3f'
+  },
+  {
+    id:'live-hud',
+    name:'HUD Interativo para Lives',
+    category:'Sistemas',
+    type:'SISTEMA',
+    badge:'PRONTO PARA USAR',
+    price:179,
+    icon:'HUD',
+    description:'Interface para jogos e lives com slots de eventos, placar, comandos e estrutura para integração em tempo real.',
+    meta:['Web','Realtime-ready','Painel'],
+    specs:{Entrega:'ZIP',Licença:'Comercial',Código:'Incluído',Formato:'Web App'},
+    color:'#54d9ff'
+  },
+  {
+    id:'knight-pack',
+    name:'Knight Character Pack',
+    category:'GLB / 3D',
+    type:'MODELO 3D',
+    badge:'GLB',
+    price:69,
+    icon:'3D',
+    description:'Pacote de personagem 3D para protótipos e jogos, organizado para importação em engines compatíveis.',
+    meta:['.GLB','Game Asset','3D'],
+    specs:{Entrega:'GLB',Licença:'Comercial',Rig:'Consultar',Texturas:'Incluídas'},
+    color:'#ac80ff'
+  },
+  {
+    id:'sprite-pack',
+    name:'Sprite Combat Pack',
+    category:'Assets',
+    type:'SPRITES',
+    badge:'PNG',
+    price:49,
+    icon:'PNG',
+    description:'Conjunto de sprites organizados para jogos 2D, HUDs e protótipos interativos.',
+    meta:['PNG','2D','Game Ready'],
+    specs:{Entrega:'ZIP',Licença:'Comercial',Fundos:'Transparente',Uso:'Jogos 2D'},
+    color:'#ff866e'
+  },
+  {
+    id:'source-system',
+    name:'Sistema Web Source Pack',
+    category:'ZIPs',
+    type:'CÓDIGO-FONTE',
+    badge:'EDITÁVEL',
+    price:99,
+    icon:'ZIP',
+    description:'Base de sistema web organizada para adaptar, personalizar e evoluir em novos projetos.',
+    meta:['Source','ZIP','Código'],
+    specs:{Entrega:'ZIP',Licença:'Comercial',Código:'100%',Stack:'Web'},
+    color:'#ffc95b'
+  },
+  {
+    id:'startup-blueprint',
+    name:'Blueprint de Produto Digital',
+    category:'Ideias',
+    type:'IDEIA + PLANO',
+    badge:'CONCEITO',
+    price:39,
+    icon:'IDEA',
+    description:'Conceito estruturado com proposta, público, monetização, MVP e próximos passos para execução.',
+    meta:['PDF','Estratégia','MVP'],
+    specs:{Entrega:'Documento',Licença:'Uso próprio',Inclui:'Roadmap',Formato:'Digital'},
+    color:'#7affbb'
+  }
+];
+
+const categories = [
+  {name:'Sites',icon:'◫',desc:'Landing pages, lojas e plataformas'},
+  {name:'Sistemas',icon:'⌘',desc:'Painéis, automações e web apps'},
+  {name:'GLB / 3D',icon:'◇',desc:'Modelos e assets tridimensionais'},
+  {name:'Assets',icon:'✦',desc:'Sprites, HUDs, PNGs e packs'},
+  {name:'ZIPs',icon:'▣',desc:'Código-fonte e pacotes completos'},
+  {name:'Ideias',icon:'◎',desc:'Conceitos, planos e blueprints'}
+];
+
+let activeFilter='Todos';
+let query='';
+let selectedProduct=null;
+let cart=JSON.parse(localStorage.getItem('ghostStoreCart')||'[]');
+
+const money=value=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(value);
+const qs=id=>document.getElementById(id);
+
+function renderCategories(){
+  qs('categoryGrid').innerHTML=categories.map(cat=>`<article class="category-card" data-category="${cat.name}"><span class="icon">${cat.icon}</span><div><strong>${cat.name}</strong><br><small>${cat.desc}</small></div></article>`).join('');
+  document.querySelectorAll('.category-card').forEach(card=>card.addEventListener('click',()=>{
+    activeFilter=card.dataset.category;
+    renderFilters();renderProducts();
+    qs('catalogo').scrollIntoView({behavior:'smooth'});
+  }));
+}
+
+function renderFilters(){
+  const list=['Todos',...categories.map(c=>c.name)];
+  qs('filters').innerHTML=list.map(item=>`<button class="filter-btn ${item===activeFilter?'active':''}" data-filter="${item}">${item}</button>`).join('');
+  document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{
+    activeFilter=btn.dataset.filter;renderFilters();renderProducts();
+  }));
+}
+
+function getFiltered(){
+  return products.filter(p=>{
+    const matchFilter=activeFilter==='Todos'||p.category===activeFilter;
+    const haystack=`${p.name} ${p.category} ${p.type} ${p.description} ${p.meta.join(' ')}`.toLowerCase();
+    return matchFilter&&haystack.includes(query.toLowerCase());
+  });
+}
+
+function renderProducts(){
+  const filtered=getFiltered();
+  qs('productGrid').innerHTML=filtered.map(p=>`<article class="product-card">
+    <div class="product-cover" style="--coverGlow:${p.color}"><span class="product-type">${p.type}</span><span class="product-badge">${p.badge}</span><div class="cover-art">${p.icon}</div><div class="cover-sub">GHOST STORE</div></div>
+    <div class="product-content"><div class="product-title-row"><h3>${p.name}</h3><span class="price">${money(p.price)}</span></div><p>${p.description}</p><div class="product-meta">${p.meta.map(m=>`<span>${m}</span>`).join('')}</div><div class="product-actions"><button class="details-btn" data-details="${p.id}">Ver detalhes</button><button class="quick-add" data-add="${p.id}" aria-label="Adicionar ${p.name}">+</button></div></div>
+  </article>`).join('');
+  qs('emptyState').classList.toggle('hidden',filtered.length!==0);
+  document.querySelectorAll('[data-details]').forEach(btn=>btn.addEventListener('click',()=>openProduct(btn.dataset.details)));
+  document.querySelectorAll('[data-add]').forEach(btn=>btn.addEventListener('click',()=>addToCart(btn.dataset.add)));
+}
+
+function openProduct(id){
+  selectedProduct=products.find(p=>p.id===id);
+  if(!selectedProduct)return;
+  qs('modalVisual').textContent=selectedProduct.icon;
+  qs('modalVisual').style.background=`radial-gradient(circle at center, ${selectedProduct.color}22, #101112 68%)`;
+  qs('modalBadges').innerHTML=`<span>${selectedProduct.type}</span><span>${selectedProduct.badge}</span>`;
+  qs('modalTitle').textContent=selectedProduct.name;
+  qs('modalDescription').textContent=selectedProduct.description;
+  qs('modalSpecs').innerHTML=Object.entries(selectedProduct.specs).map(([k,v])=>`<div><small>${k}</small><strong>${v}</strong></div>`).join('');
+  qs('modalPrice').textContent=money(selectedProduct.price);
+  qs('productModal').classList.remove('hidden');
+  document.body.classList.add('no-scroll');
+}
+
+function closeProduct(){qs('productModal').classList.add('hidden');document.body.classList.remove('no-scroll')}
+
+function saveCart(){localStorage.setItem('ghostStoreCart',JSON.stringify(cart));renderCart()}
+function addToCart(id){
+  if(!cart.includes(id))cart.push(id);
+  saveCart();showToast('Produto adicionado ao carrinho');
+}
+function removeFromCart(id){cart=cart.filter(item=>item!==id);saveCart()}
+
+function renderCart(){
+  const items=cart.map(id=>products.find(p=>p.id===id)).filter(Boolean);
+  qs('cartCount').textContent=items.length;
+  qs('cartItems').innerHTML=items.map(p=>`<div class="cart-item"><div class="cart-thumb">${p.icon}</div><div><h4>${p.name}</h4><small>${money(p.price)}</small></div><button class="remove-item" data-remove="${p.id}" aria-label="Remover">×</button></div>`).join('');
+  qs('cartEmpty').classList.toggle('hidden',items.length>0);
+  qs('cartTotal').textContent=money(items.reduce((sum,p)=>sum+p.price,0));
+  document.querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click',()=>removeFromCart(btn.dataset.remove)));
+}
+
+function openCart(){qs('drawerBackdrop').classList.remove('hidden');qs('cartDrawer').classList.add('open');qs('cartDrawer').setAttribute('aria-hidden','false');document.body.classList.add('no-scroll')}
+function closeCart(){qs('drawerBackdrop').classList.add('hidden');qs('cartDrawer').classList.remove('open');qs('cartDrawer').setAttribute('aria-hidden','true');document.body.classList.remove('no-scroll')}
+function showToast(message){const t=qs('toast');t.textContent=message;t.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.remove('show'),2200)}
+
+qs('searchToggle').addEventListener('click',()=>{qs('searchPanel').classList.toggle('hidden');if(!qs('searchPanel').classList.contains('hidden'))qs('searchInput').focus()});
+qs('searchInput').addEventListener('input',e=>{query=e.target.value;renderProducts()});
+qs('cartButton').addEventListener('click',openCart);
+qs('closeCart').addEventListener('click',closeCart);
+qs('drawerBackdrop').addEventListener('click',closeCart);
+qs('modalClose').addEventListener('click',closeProduct);
+qs('productModal').addEventListener('click',e=>{if(e.target===qs('productModal'))closeProduct()});
+qs('modalAdd').addEventListener('click',()=>{if(selectedProduct){addToCart(selectedProduct.id);closeProduct();openCart()}});
+
+qs('checkoutButton').addEventListener('click',()=>{
+  const items=cart.map(id=>products.find(p=>p.id===id)).filter(Boolean);
+  if(!items.length){showToast('Adicione um produto primeiro');return}
+  const total=items.reduce((sum,p)=>sum+p.price,0);
+  const text=`Olá! Quero finalizar este pedido na GHOST STORE:\n\n${items.map(p=>`• ${p.name} — ${money(p.price)}`).join('\n')}\n\nTotal: ${money(total)}`;
+  navigator.clipboard?.writeText(text);
+  showToast('Pedido copiado. Checkout será integrado depois.');
+});
+
+qs('quoteForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const text=`SOLICITAÇÃO DE PROJETO — GHOST STORE\n\nNome: ${qs('quoteName').value}\nTipo: ${qs('quoteType').value}\n\nProjeto:\n${qs('quoteMessage').value}`;
+  navigator.clipboard?.writeText(text);
+  showToast('Solicitação copiada para a área de transferência');
+});
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCart();closeProduct()}});
+qs('year').textContent=new Date().getFullYear();
+renderCategories();renderFilters();renderProducts();renderCart();
