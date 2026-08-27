@@ -166,8 +166,38 @@ create trigger products_set_updated_at
 before update on public.products
 for each row execute function public.set_updated_at();
 
--- BOOTSTRAP DO PRIMEIRO ADMIN
--- 1. Crie o usuário em Authentication > Users (ou entre pelo painel admin).
--- 2. Copie o UUID desse usuário.
--- 3. Execute: insert into public.store_admins (user_id) values ('UUID-DO-USUARIO');
+-- Primeiro administrador: a função só pode ser chamada por usuário autenticado.
+-- Ela permite a primeira inclusão em store_admins e fecha automaticamente após isso.
+create or replace function public.claim_first_store_admin()
+returns boolean
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  uid uuid := auth.uid();
+  claimed boolean := false;
+begin
+  if uid is null then
+    raise exception 'authentication required';
+  end if;
+
+  perform pg_advisory_xact_lock(hashtext('ghost_store_first_admin'));
+
+  if not exists (select 1 from public.store_admins) then
+    insert into public.store_admins (user_id) values (uid)
+    on conflict do nothing;
+    claimed := true;
+  elsif exists (select 1 from public.store_admins where user_id = uid) then
+    claimed := true;
+  end if;
+
+  return claimed;
+end;
+$$;
+
+revoke all on function public.claim_first_store_admin() from public;
+revoke all on function public.claim_first_store_admin() from anon;
+grant execute on function public.claim_first_store_admin() to authenticated;
+
 -- Nunca coloque service_role/secret key no config.js.
