@@ -34,12 +34,25 @@ async function verifyAdmin(){
   return Boolean(data);
 }
 
+async function claimFirstAdmin(){
+  if(!session?.user)return false;
+  const {data,error}=await sb.rpc('claim_first_store_admin');
+  if(error){console.error(error);return false}
+  return data===true;
+}
+
+async function ensureAdmin(){
+  if(await verifyAdmin())return true;
+  await claimFirstAdmin();
+  return verifyAdmin();
+}
+
 async function bootstrap(){
   if(!hasConfig){showLogin('Supabase ainda não foi configurado neste projeto.');return}
   const {data:{session:current}}=await sb.auth.getSession();
   session=current;
   if(!session){showLogin();return}
-  if(!(await verifyAdmin())){
+  if(!(await ensureAdmin())){
     await sb.auth.signOut();session=null;showLogin('Esta conta não tem permissão de administrador.');return;
   }
   showAdmin();
@@ -50,8 +63,22 @@ async function login(email,password){
   const {data,error}=await sb.auth.signInWithPassword({email,password});
   if(error)throw error;
   session=data.session;
-  if(!(await verifyAdmin())){
+  if(!(await ensureAdmin())){
     await sb.auth.signOut();session=null;throw new Error('Conta autenticada, mas sem permissão de administrador.');
+  }
+  showAdmin();await loadProducts();
+}
+
+async function signupFirstAdmin(email,password){
+  const {data,error}=await sb.auth.signUp({email,password});
+  if(error)throw error;
+  if(!data.session){
+    showLogin('Conta criada. Confirme o e-mail recebido e depois clique em Entrar. Se for a primeira conta, ela será promovida a administrador automaticamente.');
+    return;
+  }
+  session=data.session;
+  if(!(await ensureAdmin())){
+    await sb.auth.signOut();session=null;throw new Error('Já existe um administrador configurado para esta loja.');
   }
   showAdmin();await loadProducts();
 }
@@ -119,6 +146,13 @@ qs('loginForm').addEventListener('submit',async e=>{
   e.preventDefault();if(!hasConfig){qs('authMessage').textContent='Configure o Supabase primeiro.';return}
   const button=qs('loginButton');button.disabled=true;button.textContent='Entrando...';qs('authMessage').textContent='';
   try{await login(qs('loginEmail').value.trim(),qs('loginPassword').value)}catch(err){console.error(err);showLogin(err.message||'Falha no login')}finally{button.disabled=false;button.textContent='Entrar'}
+});
+qs('signupButton').addEventListener('click',async()=>{
+  if(!hasConfig){qs('authMessage').textContent='Configure o Supabase primeiro.';return}
+  const email=qs('loginEmail').value.trim();const password=qs('loginPassword').value;
+  if(!email||password.length<6){qs('authMessage').textContent='Informe um e-mail válido e uma senha com pelo menos 6 caracteres.';return}
+  const button=qs('signupButton');button.disabled=true;button.textContent='Criando...';qs('authMessage').textContent='';
+  try{await signupFirstAdmin(email,password)}catch(err){console.error(err);showLogin(err.message||'Não foi possível criar o administrador')}finally{button.disabled=false;button.textContent='Criar primeiro administrador'}
 });
 qs('logoutButton').addEventListener('click',async()=>{await sb.auth.signOut();session=null;products=[];showLogin()});
 qs('newProductButton').addEventListener('click',()=>openEditor());qs('closeEditor').addEventListener('click',closeEditor);qs('cancelEditor').addEventListener('click',closeEditor);qs('productEditor').addEventListener('click',e=>{if(e.target===qs('productEditor'))closeEditor()});
