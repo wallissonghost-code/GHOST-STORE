@@ -27,11 +27,12 @@ const money=value=>new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL
 const qs=id=>document.getElementById(id);
 
 async function loadProducts(){
-  const useSupabase=Boolean(cfg.supabaseUrl&&cfg.supabaseAnonKey);
+  const publicKey=cfg.supabasePublishableKey||cfg.supabaseAnonKey||'';
+  const useSupabase=Boolean(cfg.supabaseUrl&&publicKey);
   if(useSupabase){
     try{
       const url=`${cfg.supabaseUrl}/rest/v1/${cfg.productsTable||'products'}?select=id,name,category,type,badge,price,icon,description,meta,specs,color,published&published=eq.true&order=created_at.desc`;
-      const res=await fetch(url,{headers:{apikey:cfg.supabaseAnonKey,Authorization:`Bearer ${cfg.supabaseAnonKey}`}});
+      const res=await fetch(url,{headers:{apikey:publicKey,Authorization:`Bearer ${publicKey}`}});
       if(!res.ok)throw new Error(await res.text());
       products=(await res.json()).map(normalizeProduct);
       if(products.length)return;
